@@ -4,6 +4,8 @@
  */
 
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -22,27 +24,41 @@ import javazoom.jl.player.advanced.AdvancedPlayer;
 /* 1. Download the JavaZoom jar from here: http://bit.ly/javazoom
  * 2. Right click your project and add it as an External JAR (Under Java Build Path > Libraries).*/
 
-public class Jukebox implements Runnable {
+public class Jukebox implements Runnable, ActionListener{
 
-	
 	JFrame frame = new JFrame();
 	JPanel panel = new JPanel();
 	JButton badger = new JButton();
 	JButton shark = new JButton();
 	JButton busted = new JButton();
 	public static void main(String[] args) {
+		Jukebox jukebox = new Jukebox();
+		jukebox.run();
 		SwingUtilities.invokeLater(new Jukebox());
 	}
 
+	Song song1 = new Song("badger.mp3");
+	Song song2 = new Song("Shark.mp3");
+	Song song3 = new Song("Busted.mp3");
            public void run() {
 
 		// 3. Find an mp3 on your computer or on the Internet.
 		// 4. Create a Song
-        	   Song song1 = new Song("badger.mp3");
-        	   Song song2 = new Song("Shark.mp3");
-        	   Song song3 = new Song("Busted.mp3");
+       
         	   
 		// 5. Play the Song
+        	   busted.setText("Phineas and Ferb: Busted");
+        	   shark.setText("Baby Shark Song");
+        	   badger.setText("Badger Song");
+        	   frame.setVisible(true);
+        	   frame.setSize(300, 300);
+        	   frame.add(panel);
+        	   panel.add(badger);
+        	   panel.add(shark);
+        	   panel.add(busted);
+        	   busted.addActionListener(this);
+        	   badger.addActionListener(this);
+        	   shark.addActionListener(this);
         	   
 		/*
 		 * 6. Create a user interface for your Jukebox so that the user can to
@@ -58,6 +74,37 @@ public class Jukebox implements Runnable {
 		Icon icon = new ImageIcon(imageURL);
 		return new JLabel(icon);
 	}
+	
+	public void badger() {
+		song2.stop();
+		song3.stop();
+		song1.play();
+	}
+	
+	public void busted() {
+		song1.stop();
+		song2.stop();
+  	    song3.play();
+	}
+	
+	public void shark() {
+		song1.stop();
+		song3.stop();
+		 song2.play();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub}
+		if(e.getSource().equals(badger)) {
+			badger();
+		}
+		if(e.getSource().equals(busted)) {
+			busted();
+		}
+		if(e.getSource().equals(shark)) {
+			shark();
+		}
 
 }
 
@@ -144,5 +191,6 @@ class Song {
 			return this.getClass().getResourceAsStream(songAddress);
 		}
 	}
+}
 }
 

@@ -11,14 +11,20 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-public class MagicBox extends JPanel implements Runnable, MouseListener {
+import com.sun.glass.events.KeyEvent;
 
+public class MagicBox extends JPanel implements Runnable, MouseListener {
+		JFrame frame = new JFrame();
+		JPanel panel = new JPanel();
+		MediaPalace palace = new MediaPalace();
+		
 	/*
 	 * Work together as a TEAM of 2 or 3 to make this project. We are going to hide secrets within the magic box. 
 	 * When the user clicks on a secret place, stuff will happen.
@@ -29,24 +35,29 @@ public class MagicBox extends JPanel implements Runnable, MouseListener {
 	 * 
 	 * 3. backgroundImage.getRGB(keyEvent.getX(), keyEvent.getY()) will give you the color of the current pixel.
 	 */
-
+		
 	BufferedImage backgroundImage;
 
 	public static void main(String[] args) throws Exception {
 		SwingUtilities.invokeLater(new MagicBox());
-	
+		MagicBox box = new MagicBox();
+		box.run();
 		
 		
 	}
 
 	@Override
 	public void run() {
+		frame.setVisible(true);
+		frame.add(panel);
+		frame.addMouseListener(this);
 		try {
 			loadBackgroundImage();
 			createUI();
 		} catch (Exception w) {
 			System.err.println(w.getMessage());
 		}
+		
 	}
 
 	private void createUI() {
@@ -70,11 +81,24 @@ public class MagicBox extends JPanel implements Runnable, MouseListener {
 	@Override
 	public void paintComponent(Graphics g) {
 		g.drawImage(backgroundImage, 0, 0, null);
+		
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// TODO Auto-generated method stub
+		backgroundImage.getRGB(e.getX(), e.getY());
+		Random rand = new Random();
+		int x = rand.nextInt(2);
+		if(x == 1) {
+		palace.playSoundFromInternet(getName());
+		}
+		else if(x == 2) {
+			palace.playSoundFromInternet(getToolTipText());
+		}
+		else {
+			palace.playSoundFromInternet(getName()); //mp3
+		}
 		
 	}
 
